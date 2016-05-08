@@ -6,19 +6,19 @@ Basically I love my xmonad/xmobar setup but there's a handful of tasks that I ca
 NetworkManager can do a lot of things but I do not plan to do all of them, but my goals are
 
 * wifi
-** enable/disable interface
-** search
-** connect (open and authenticated using wpa-psk)
-** disconnect
+  * enable/disable interface
+  * search
+  * connect (open and authenticated using wpa-psk)
+  * disconnect
 * mobile broadband
-** enable/disable interface
-** configure
-** connect
-** disconnect
+  * enable/disable interface
+  * configure
+  * connect
+  * disconnect
 * bluetooth
-** enable/disable interface
-** search
-** pair
+  * enable/disable interface
+  * search
+  * pair
 
 Right now it can search for and connect to open and protected wifi networks, so there's quite a way to go :)
 
