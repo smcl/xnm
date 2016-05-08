@@ -2,6 +2,8 @@
 
 import dbus
 import NetworkManager
+import tkSimpleDialog
+import uuid
 
 from Tkinter import *
 
@@ -23,21 +25,82 @@ def renderStatus(container, connected=False, saved=False, protected=False):
     Label(container, text=lockChar, bg=bgColor, fg=fgColor if protected else bgColor, font=iconFont).grid(row = 0, column = 0)
     Label(container, text=starChar, bg=bgColor, fg=fgColor if saved else bgColor, font=iconFont).grid(row = 0, column = 1)
     Label(container, text=connChar, bg=bgColor, fg=fgColor if connected else bgColor, font=iconFont).grid(row = 0, column = 2)
+
+def createWifiConnection(ap, psk=None):
+    wifiConn = {
+        "802-11-wireless" : {
+            "mode" : "infrastructure",
+            "ssid" : ap.Ssid
+        },
+        "connection" : {
+            "id" : ap.Ssid,
+            "type" : "802-11-wireless",
+            "uuid" : str(uuid.uuid4())
+        },
+        "ipv4" : {
+            "method" : "auto"
+        },
+        "ipv6" : {
+            "method" : "auto"
+        }
+    }
     
-def addConnection(container, line, connected=False, saved=None, protected=False, dev=None):
+    if psk:
+        wifiConn["802-11-wireless"]["security"] = "802-11-wireless-security"
+        wifiConn["802-11-wireless-security"] = {
+            "auth-alg" : "open",
+            "key-mgmt" : "wpa-psk",
+            "psk" : psk
+        }
+
+    return wifiConn
+    
+def connectExisting(dev, saved):
+    NetworkManager.NetworkManager.ActivateConnection(saved, dev, "/")
+    sys.exit()
+
+def getPasswordAndConnect(dev, ap):
+    password = tkSimpleDialog.askstring("Password for FLAT_6.4", "Please input the password for FLAT_6.4")
+    if password:
+        print(password)
+    else:
+        print("cancelled..")
+
+    newConn = createWifiConnection(ap, password)
+    NetworkManager.Settings.AddConnection(newConn)
+    NetworkManager.NetworkManager.ActivateConnection(newConn, dev, "/")
+    sys.exit()
+
+def addConnection(container, line):
     f = Frame(container, bg=bgColor)
 
-    renderStatus(f, connected, saved, protected)
+    renderStatus(f)
 
     l = Label(f, text=" " + line, bg=bgColor, fg=fgColor, font=bodyFont, justify=LEFT, anchor=W)
     l.grid(row=0, column = 3, sticky="ew")
     
     l.bind("<Enter>", lambda e: e.widget.config(bg=midColor, fg=bgColor))
     l.bind("<Leave>", lambda e: e.widget.config(bg=bgColor, fg=fgColor))
+   
+    f.pack(fill="x")
+  
+    
+def addWifiConnection(container, ap, connected=False, saved=None, protected=False, dev=None):
+    f = Frame(container, bg=bgColor)
+
+    renderStatus(f, connected, saved, protected)
+
+    l = Label(f, text=" " + ap.Ssid, bg=bgColor, fg=fgColor, font=bodyFont, justify=LEFT, anchor=W)
+    l.grid(row=0, column = 3, sticky="ew")
+    
+    l.bind("<Enter>", lambda e: e.widget.config(bg=midColor, fg=bgColor))
+    l.bind("<Leave>", lambda e: e.widget.config(bg=bgColor, fg=fgColor))
 
     if saved and dev and not connected:
-        l.bind("<Button-1>",lambda e: NetworkManager.NetworkManager.ActivateConnection(saved, dev, "/"))
-        
+        l.bind("<Button-1>", lambda e: connectExisting(dev, saved))
+    else:
+        l.bind("<Button-1>", lambda e: getPasswordAndConnect(dev, ap))
+    
     f.pack(fill="x")
 
 def savedWifiConnection(ssid, mac):
@@ -63,7 +126,7 @@ def dumpWifi(container, dev):
         connected = not isinstance(dev.SpecificDevice().ActiveAccessPoint, dbus.ObjectPath) and ap.Ssid == dev.SpecificDevice().ActiveAccessPoint.Ssid
         saved = savedWifiConnection(ap.Ssid, ap.HwAddress)
         protected = ap.Flags == 1
-        addConnection(container, ap.Ssid, connected, saved, protected, dev)
+        addWifiConnection(container, ap, connected, saved, protected, dev)
             
 def dumpEthernet(container, dev):                        
     addConnection(container, "(ethernet)")
@@ -75,6 +138,7 @@ def dumpGeneric(container, dev):
     addConnection(container, "(generic)")
 
 root = Tk()
+root.wm_title("xnm")
 
 for i, dev in enumerate(NetworkManager.NetworkManager.GetDevices()):
     deviceHeader = "%s (%s):" % (dev.Interface, NetworkManager.const("device_state", dev.State))
@@ -90,5 +154,6 @@ for i, dev in enumerate(NetworkManager.NetworkManager.GetDevices()):
 	dumpGeneric(ifLabel, dev)
 
     ifLabel.pack(fill="both")
-        
+  
 root.mainloop()
+root.destroy()
