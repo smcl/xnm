@@ -12,7 +12,7 @@ NetworkManager can do a lot of things but I do not plan to do all of them, but m
 * mobile broadband
   * [ ] configure
   * [ ] connect
-  * [ ]disconnect
+  * [ ] disconnect
 * bluetooth
   * [ ] search
   * [ ] pair
