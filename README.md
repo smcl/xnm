@@ -3,7 +3,7 @@ xnm is a lightweight networkmanager menu for window managers missing one, such a
 
 Basically I love my xmonad/xmobar setup but there's a handful of tasks that I can't currently accomplish using my current setup. One of these tasks is setting up and connecting to networks using NetworkManager. Xmobar doesn't really support little popup menus, so I'm creating python/tk app that will be launched with an xmobar <action>, and will be as similar in appearance to a popup as possible.
 
-NetworkManager can do a lot of things but I do not plan to do all of them, but my goals are
+NetworkManager can do a lot of things but I do not plan to do all of them, but my goals are (checkbox indicates whether completed or not):
 
 * wifi
   * [x] search
