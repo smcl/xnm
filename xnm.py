@@ -78,7 +78,9 @@ def connectNew(dev, ap, protected):
     password = None
     
     if protected:
-        password = tkSimpleDialog.askstring("Password for %"%(ap.Ssid), "Please input the password for %"%(ap.Ssid))
+        title = ap.Ssid
+        message = "Please input the password for %s" % (ap.Ssid)
+        password = tkSimpleDialog.askstring(title, message)
 
     if password:
         newConn = createWifiConnection(ap, password)
