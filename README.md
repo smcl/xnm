@@ -8,11 +8,11 @@ NetworkManager can do a lot of things but I do not plan to do all of them, but m
 * wifi
   * [x] search
   * [x] connect (open and authenticated using wpa-psk)
-  * [ ] disconnect
+  * [x]  disconnect
 * mobile broadband
-  * [ ] configure
-  * [ ] connect
-  * [ ] disconnect
+  * [ ] configure new
+  * [x] connect
+  * [x] disconnect
 * bluetooth
   * [ ] search
   * [ ] pair
