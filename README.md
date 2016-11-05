@@ -6,13 +6,13 @@ xnm is a lightweight networkmanager menu for window managers missing one, such a
 Either retrieve from pypi using pip:
 
 ```
-$ pip install xsms
+$ pip install xnm
 ```
 
 or clone this repo, and install using `setup.py`:
 ```
-$ git clone https://github.com/smcl/xsms
-$ cd xsms
+$ git clone https://github.com/smcl/xnm
+$ cd xnm
 $ python setup.py install
 ```
 
@@ -27,7 +27,7 @@ $ python -m xnm
 ... or you can add it as an `action` in your xmobar setup, so that when you click an icon (I use `DynNetwork`) like so:
 
 ```
- template = "... <action=`/home/sean/.xmonad/xnm.py`>%dynnetwork% <fn=1></fn></action> ..."
+ template = "... <action=`python -m xnm`>%dynnetwork% <fn=1></fn></action> ..."
 ```
 
 ## TODO
