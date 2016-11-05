@@ -45,8 +45,10 @@ NetworkManager can do a lot of things but I do not plan to do all of them, but m
 * bluetooth
   * [ ] search
   * [ ] pair
-
-Right now it can search for and connect to open and protected wifi networks, so there's quite a way to go :)
+* general
+  * [ ] don't rely on Font Awesome for icons
+  * [ ] permit font to be configured (not everyone has Source Code Pro)
+  * [ ] hide interfaces that I can't control or do anything useful with (loopback, ethernet)
 
 # screenshot
 
